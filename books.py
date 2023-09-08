@@ -76,6 +76,38 @@ def search_book_in_collection(books):
     else:
         print("No matching books found.")
 
+def update_book_info(books):
+    title = input("Enter the title of the book you want to update: ").strip()
+    book = next((book for book in books if book['title'].lower() == title.lower()), None)
+     if book:
+        new_title = input(f"Enter the new title (current: {book['title']}): ").strip()
+        new_author = input(f"Enter the new author (current: {book['author']}): ").strip()
+        new_description = input(f"Enter the new description (current: {book['description']}): ").strip()
+        new_isbn = input(f"Enter the new ISBN (current: {book['isbn']}): ").strip()
+
+    if new_title:
+        book['title'] = new_title
+    if new_author:
+        book['author'] = new_author
+    if new_description:
+        book['description'] = new_description
+    if new_isbn:
+        book['isbn'] = new_isbn
+
+    save_books(books)
+    print("Book details updated successfully!")
+else:
+print("Book not found. Please try again")
+
+def list_books(books, start_index = 0):
+    end_index = start_index + BOOKS_PER_PAGE
+    displayed_books = start_index + BOOKS_PER_PAGE
+    for idx, books in enumerate(displayed_books, start = start_index + 1):
+        print(f"{idx}. {book['title']} by {book['author']}")
+        
+    return len(displayed_books)
+         
+
 def main():
     books = load_books()
 
@@ -85,15 +117,24 @@ def main():
         print("1. List books")
         print("2. Add a book")
         print("3. Remove a book")
-        print("4. Quit")
+        print("4. Search for book in collection")
+        print("5. Update book information")
+        print("6. Quit")
 
         choice = input("Choose an option: ").strip()
 
         if choice == "1":
-            clear_screen()
+            start_index = 0
+            while True:
+                clear_screen()
+                displayed_count = list_books(books, start_index = start_index)
+                if displayed_count == BOOKS_PER_PAGE and input("Next page? (Y/N)").lower() == 'y':
+                    start_index += BOOKS_PER_PAGE
+                else:
+                    break
 
-            list_books(books)
             input("Press Enter to continue...")
+            
         elif choice == "2":
             clear_screen()
             add_book(books)
@@ -103,7 +144,16 @@ def main():
             remove_book(books)
             input("Press Enter to continue...")
         elif choice == "4":
+            clear_screen()
+            search_book_in_collection(books)
+            input("Press Enter to continue...")
+        elif choice == "5":
+            clear_screen()
+            update_book_info(books)
+            input("Press Enter to continue...")
+        elif choice == "6":
             break
+            
         else:
             input("Invalid choice. Press Enter to continue...")
 
