@@ -43,7 +43,7 @@ def add_book(books):
     title_or_isbn = input("Enter the book title or ISBN: ").strip()
     book = search_book(title_or_isbn)
 
-    if book is not None:
+    if book:
         books.append(book)
         save_books(books)
         print(f"Book '{book['title']}' by {book['author']} added.")
@@ -53,10 +53,9 @@ def add_book(books):
 
 def remove_book(books):
     title = input("Enter the title of the book you want to remove: ").strip()
-    book = next(
-        (book for book in books if book["title"].lower() == title.lower()), None)
+    book = next((book for book in books if book["title"].lower() == title.lower()), None)
 
-    if book is not None:
+    if book:
         books.remove(book)
         save_books(books)
         print(f"Book '{book['title']}' by {book['author']} removed.")
@@ -64,13 +63,18 @@ def remove_book(books):
         print("Book not found. Please try again.")
 
 
-def list_books(books):
-    for book in books:
-        print(f"{book['title']} by {book['author']}")
-        print(f"ISBN: {book['isbn']}")
-        print(f"Description: {book['description']}")
-        print()
+def search_book_in_collection(books):
+    title = input("Enter the title of the book you want to search for: ").strip()
+    found_books = [book for book in books if title.lower() in book["title].lower()]
 
+    if found_books:
+        for book in found_books:
+            print(f"{book['title']} by {book['arthur']}")
+            print(f"ISBN: {book['isbn']}")
+            print(f"Description: {book['descripition']}")
+            print()
+    else:
+        print("No matching books found.")
 
 def main():
     books = load_books()
